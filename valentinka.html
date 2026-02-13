@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14 февраля ❤️</title>
+
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 380px;
+            height: 85vh;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+            overflow-y: auto;
+        }
+
+        .page.active { display: block; }
+
+        h1, h2 { color: #ff3e6c; }
+
+        button {
+            padding: 12px 25px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #ff3e6c;
+            color: white;
+        }
+
+        .no { background: #ddd; color:#333; position: relative; }
+
+        .photos img {
+            width: 100%;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 14px;
+            margin-bottom: 10px;
+        }
+
+        .gift {
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.4s;
+        }
+
+        .gift.open {
+            transform: scale(0.8) rotate(12deg);
+        }
+
+        .qr {
+            display: none;
+        }
+
+        .qr img {
+            width: 180px;
+            margin-top: 15px;
+        }
+
+        .indicator {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #ff3e6c;
+        }
+
+        .heart {
+            position: fixed;
+            top: -10px;
+            font-size: 16px;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- 1 -->
+<div class="page active" id="page1">
+    <h1>Жаным менын это твоя валентинка💖Главный вопрос ты меня любишь?️</h1>
+    <button onclick="goToPage(2)">Ия 💖</button>
+    <button class="no" id="noBtn">Жоқ.</button>
+    <div class="indicator">● ○ ○</div>
+</div>
+
+<!-- 2 -->
+<div class="page" id="page2">
+    <h2>Иииии жяным так и знал 💕</h2>
+    <h3>Люблю тебя жаным менын ❤️</h3>
+    <div class="photos">
+        <img src="photo1.jpg">
+        <img src="photo2.jpg">
+        <img src="photo3.jpg">
+        <img src="photo4.jpg">
+        <img src="photo5.jpg">
+    </div>
+    <button onclick="goToPage(3)">Дальше 🎁</button>
+    <div class="indicator">○ ● ○</div>
+</div>
+
+<!-- 3 -->
+<div class="page" id="page3">
+    <h2>А это тебееее 💖</h2>
+    <p>Открытканы аш жаным</p>
+    <div class="gift" id="gift">💌</div>
+
+    <div class="qr" id="qr">
+        <p>Ииии теперь отсканируй 🎁❤️</p>
+        <img src="qr.png">
+    </div>
+    <div class="indicator">○ ○ ●</div>
+</div>
+
+<script>
+    let current = 1;
+
+    function goToPage(n) {
+        document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+        document.getElementById("page"+n).classList.add("active");
+        current = n;
+    }
+
+    // кнопка "нет"
+    const noBtn = document.getElementById("noBtn");
+    function moveNo() {
+        noBtn.style.position = "absolute";
+        noBtn.style.left = Math.random() * 200 + "px";
+        noBtn.style.top = Math.random() * 150 + "px";
+    }
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("touchstart", e => { e.preventDefault(); moveNo(); });
+
+    // подарок
+    document.getElementById("gift").onclick = () => {
+        document.getElementById("gift").classList.add("open");
+        document.getElementById("qr").style.display = "block";
+    };
+
+    // сердечки
+    setInterval(() => {
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = "❤️";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.animationDuration = (3 + Math.random() * 4) + "s";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 7000);
+    }, 400);
+
+    // свайп
+    let startX = 0;
+    document.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+    document.addEventListener("touchend", e => {
+        let endX = e.changedTouches[0].clientX;
+        if (startX - endX > 50 && current < 3) goToPage(current + 1);
+        if (endX - startX > 50 && current > 1) goToPage(current - 1);
+    });
+</script>
+
+</body>
+</html>
